@@ -1,0 +1,19 @@
+---
+- name: GET Golang application binary file from Github release
+  get_url:
+    url: https://github.com/amirianos/PaasEasy/releases/download/v1.0.0/paaseasy
+    dest: /home/ubuntu/PaaSeasy
+    mode: 0777
+
+- name: Create Service
+  template:
+    src: goapplication.service.j2
+    dest: /etc/systemd/system/goapplication.service
+    owner: root
+    mode: 0400
+
+- name: start application service
+  service:
+    name: goapplication
+    state: started
+

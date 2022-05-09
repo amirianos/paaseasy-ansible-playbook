@@ -1,0 +1,9 @@
+---
+- name: create namespace
+  shell: kubectl create namespace argocd
+
+- name: create argocd pod
+  shell: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+- name: make accessable from public internet
+  shell: kubectl port-forward svc/argocd-server -n argocd 8080:443

@@ -1,0 +1,27 @@
+---
+- name: create volum for DB
+  file:
+    path: "{{ volpath }}"
+    state: directory
+    mode: 0766
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+          # src: "{{temppath}}/bareDB"
+    # dest: "{{ volpath }}"
+    #    owner: "{{ ansible_user }}"
+
+- name: run container
+  shell: "docker run -it -d --name=mysql-server2 -p 3306:3306 -v {{ volpath }}:/var/lib/mysql -e MYSQL_ROOT_PASSWORD={{dbpassword}} mysql"
+
+- name: Pause for 2 minutes for ready mysql container
+  pause:
+    minutes: 2
+- name: Create database inside of container 
+  shell: "sudo docker exec -it mysql-server2 mysql -u root -p{{dbpassword}} -e 'create database {{ dbname }};' "
+
+- name: create tables inside of container
+  shell: "docker exec -it mysql-server2 mysql -u root -p{{dbpassword}} -e '{{item}}'"
+  with_items:
+    - create table amirtest.bcrypt(userid int not null auto_increment,username varchar(255),hash varchar(255),primary key (userid) );
+    - create table amirtest.lastversion( path varchar(255), lastversion varchar(255));

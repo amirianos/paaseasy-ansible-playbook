@@ -1,0 +1,8 @@
+[Unit]
+Description=Webhooks
+
+[Service]
+ExecStart=/home/ubuntu/PaaSeasy/webhook -hooks /home/ubuntu/PaaSeasy/configfiles/hooks.json -hotreload -verbose
+
+[Install]
+WantedBy=multi-user.target
