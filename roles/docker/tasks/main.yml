@@ -1,29 +1,4 @@
 ---
-- name: remove old version
-  apt:
-    pkg: "{{ item }}"
-    state: absent
-    update_cache: yes
-  become: yes
-  with_items:
-    - docker
-    - docker-engine
-    - docker.io 
-    - containerd
-    - runc
-
-- name: Add docker repo signing key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-  become: yes
-
-- name: add docker apt repository
-  apt_repository: 
-    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable' 
-    state: present  
-    update_cache: yes
-  become: yes
 
 - name: install docker pkg
   apt:
@@ -31,19 +6,8 @@
     state: present
     update_cache: yes
   with_items:
-    - docker-ce-cli 
-    - docker-ce 
+    - docker.io
   become: yes
-
-- name: chenge cgroup driver 
-  copy:
-      dest: "/etc/docker/daemon.json"
-      content: |
-        {
-        "exec-opts": ["native.cgroupdriver=systemd"]  
-        }
-  become: yes
-
 
 - name: enable docker service 
   systemd:
@@ -52,3 +16,6 @@
     daemon_reload: yes
     enabled: yes
   become: yes
+
+- name: login to your account
+  shell: docker login -u "{{ username }}" -p "{{ password }}"

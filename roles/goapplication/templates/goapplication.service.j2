@@ -1,8 +1,9 @@
 [Unit]
-Description=Webhooks
+Description=Go PaaS Application
 
 [Service]
-ExecStart=/home/ubuntu/PaaSeasy/paaseasy
+WorkingDirectory=/home/ubuntu/goapp/PaaSeasy
+ExecStart=/home/ubuntu/goapp/PaaSeasy/paaseasy
 
 [Install]
 WantedBy=multi-user.target

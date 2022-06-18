@@ -1,0 +1,52 @@
+---
+
+- name: Add k8s repo signing key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  become: yes
+
+- name: add k8s apt repository
+  apt_repository: 
+    repo: 'deb https://apt.kubernetes.io/ kubernetes-xenial main' 
+    state: present  
+  become: yes
+
+- name: remove old version
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+    update_cache: yes
+  become: yes
+  with_items:
+    - kubeadm 
+    - kubelet 
+    - kubectl
+
+- name: install k8s pkg
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - kubeadm 
+    - kubelet 
+    - kubectl
+  become: yes
+
+- name: make swap off 
+  command: "swapoff --all"
+  become: yes
+
+- name: reset cluster
+  become: yes
+  shell: "kubeadm reset --force" 
+
+- name: get join command 
+  shell: cat "{{ ansible_user_home }}"/token.txt
+  register: JoinCommand
+  become: yes
+  run_once: true
+ 
+- name: join to cluster 
+  shell: "{{ JoinCommand.stdout }}"

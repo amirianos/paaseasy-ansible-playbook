@@ -7,9 +7,6 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
 
-          # src: "{{temppath}}/bareDB"
-    # dest: "{{ volpath }}"
-    #    owner: "{{ ansible_user }}"
 
 - name: run container
   shell: "docker run -it -d --name=mysql-server2 -p 3306:3306 -v {{ volpath }}:/var/lib/mysql -e MYSQL_ROOT_PASSWORD={{dbpassword}} mysql"

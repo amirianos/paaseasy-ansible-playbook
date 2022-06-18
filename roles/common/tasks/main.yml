@@ -11,4 +11,5 @@
     - curl 
     - gnupg 
     - lsb-release
+    - unzip
   become: yes

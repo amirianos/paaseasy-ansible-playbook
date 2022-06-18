@@ -27,10 +27,16 @@
         name: goapplication
       when: inventory_hostname in groups['mainapp']
     
-    - name: Kubernetes 
+    - name: Kubernetes master
       include_role:
-        name: k8s
-    
+        name: k8smaster
+      when: inventory_hostname in groups['master']
+
+    - name: Kubernetes worker
+      include_role:
+        name: k8sworker
+      when: inventory_hostname in groups['worker']
+
     - name: argocd
       include_role:
         name: argocd

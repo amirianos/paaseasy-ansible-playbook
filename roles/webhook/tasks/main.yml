@@ -4,13 +4,6 @@
     path: /home/ubuntu/PaaSeasy
     state: directory
 
-- name: clone git repo 
-  git :
-    repo: https://github.com/amirianos/PaaSeasy
-    dest: /home/ubuntu/PaaSeasy
-    clone: yes
-    update: yes
-
 - name: GET webhook binary file from Github release
   get_url:
     url: https://github.com/amirianos/PaasEasy/releases/download/v1.0.0/webhook

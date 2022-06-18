@@ -1,0 +1,3 @@
+ansible_file_path: /home/ubuntu/paasansible
+key_file_path: /home/ubuntu/paasansible/ar-final-privatekey.pem
+ansible_user: ubuntu

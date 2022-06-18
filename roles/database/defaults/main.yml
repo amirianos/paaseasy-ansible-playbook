@@ -1,5 +1,4 @@
 ---
 volpath: /home/ubuntu/docker-vol/bareDB
-dbname: amirtest
-dbpassword: AmirSoltani1
-# defaults file for database
+dbname: <DataBase Name>
+dbpassword: <DataBase Password>

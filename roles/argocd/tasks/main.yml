@@ -5,5 +5,32 @@
 - name: create argocd pod
   shell: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-- name: make accessable from public internet
-  shell: kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+- name: download sources
+  get_url: 
+    url: https://github.com/argoproj/argo-cd/releases/download/v2.2.5/argocd-linux-amd64
+    dest: /home/ubuntu/argocd
+
+- name: copy binary file to /usr/local/bin
+  copy:
+    src: /home/ubuntu/argocd
+    dest: /usr/local/bin
+    mode: a+x
+    remote_src: yes
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+  become: yes
+
+- name: create deploy namespace 
+  shell: kubectl create ns deploy
+
+- name: Copy main yaml file host
+  template:
+    src: main.yaml.j2
+    dest: ~/main.yaml
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+    mode: "0400"
+
+- name: run and apply main app on cluster
+  shell: kubectl apply -f ~/main.yaml
+
+
